@@ -1,27 +1,20 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
+import os
 import numpy as np
 
-
+# Подключение калькулятора
 try:
     from . import calculator
 except ImportError:
     import calculator
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 CORS(app)
 
-@app.route('/')
-def index():
-    return jsonify({
-        "message": "Backend is running successfully 🚀",
-        "endpoints": [
-            "/api/generate-values",
-            "/api/calculate",
-            "/api/default-coefficients"
-        ]
-    })
-
+# -------------------
+# API маршруты
+# -------------------
 @app.route('/api/generate-values', methods=['GET'])
 def generate_values():
     try:
@@ -34,14 +27,11 @@ def generate_values():
 def calculate():
     try:
         data = request.get_json()
-
         X0 = [data['initialValues'][f'X{i+1}'] for i in range(18)]
         params = data['parameters']
         coeffs = data.get('coefficients', {})
-
         T = params.get('T', 50.0)
         dt = params.get('dt', 0.5)
-
         if dt <= 0 or T <= 0:
             return jsonify({'success': False, 'error': 'T и dt должны быть положительными'})
 
@@ -87,5 +77,20 @@ def default_coefficients():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
+# -------------------
+# Отдача React фронта
+# -------------------
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_frontend(path):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
+
+# -------------------
+# Запуск локально
+# -------------------
 if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
+
