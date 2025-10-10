@@ -1,7 +1,5 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import json
-import random
 import numpy as np
 
 
@@ -36,6 +34,7 @@ def generate_values():
 def calculate():
     try:
         data = request.get_json()
+
         X0 = [data['initialValues'][f'X{i+1}'] for i in range(18)]
         params = data['parameters']
         coeffs = data.get('coefficients', {})
@@ -77,7 +76,6 @@ def calculate():
                 'radar': radar_image
             }
         })
-
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
@@ -90,5 +88,4 @@ def default_coefficients():
         return jsonify({'success': False, 'error': str(e)})
 
 if __name__ == '__main__':
-    # Локальный запуск
     app.run(debug=True, host='127.0.0.1', port=5000)
