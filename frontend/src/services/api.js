@@ -1,16 +1,18 @@
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL;
 
-const api = axios.create({
-  baseURL: API_BASE,
-  timeout: 30000,
-});
+export const generateValues = async () => {
+    const res = await axios.get(`${API_URL}/generate-values`);
+    return res.data;
+}
 
-export const apiService = {
-  generateValues: () => api.get('/generate-values'),
-  calculate: (data) => api.post('/calculate', data),
-  getDefaultCoefficients: () => api.get('/default-coefficients')
-};
+export const runSystem = async (data) => {
+    const res = await axios.post(`${API_URL}/calculate`, data);
+    return res.data;
+}
 
-export default api;
+export const loadDefaultCoefficients = async () => {
+    const res = await axios.get(`${API_URL}/default-coefficients`);
+    return res.data;
+}
