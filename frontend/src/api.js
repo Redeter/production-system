@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://production-system.onrender.com/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 export const generateValues = async () => {
     const res = await axios.get(`${API_URL}/generate-values`);
@@ -16,3 +16,4 @@ export const loadDefaultCoefficients = async () => {
     const res = await axios.get(`${API_URL}/default-coefficients`);
     return res.data;
 }
+
