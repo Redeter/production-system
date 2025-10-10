@@ -110,7 +110,7 @@ function App() {
     <div className="container-fluid py-3">
       <div className="row">
         <div className="col-12">
-          <h1 className="text-center mb-3">Калькулятор системы Вероятностей ошибок на сварочном производстве</h1>
+          <h1 className="text-center mb-3"></h1>
 
           {error && <div className="alert alert-dark alert-dismissible fade show border" role="alert">
             <strong>Ошибка:</strong> {error}
