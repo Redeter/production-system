@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000';
+const API_URL = 'https://production-system.onrender.com';
 
 export const generateValues = async () => {
     const res = await axios.get(`${API_URL}/generate`);
