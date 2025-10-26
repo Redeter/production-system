@@ -10,23 +10,51 @@ const ParametersTab = ({
 }) => {
   const [activeSection, setActiveSection] = useState('initial');
 
+  // Архив названий для полей X
+  const xFieldNames = {
+    X1: "X1 Количество забракованных балок на 100 единиц продукции",
+    X2: "X2 Численность операторов РТК", 
+    X3: "X3 Среднее количество остановок РТК на один цикл",
+    X4: "X4 Средняя длина дефектных сварных швов на 1 единицу продукции",
+    X5: "X5 Выполненные работы по плановому обслуживанию РТК",
+    X6: "X6 Численность программистов",
+    X7: "X7 Численность наладчиков сварочного оборудования",
+    X8: "X8 Численность контролеров ОТК",
+    X9: "X9 Численность цеховых технологов",
+    X10: "X10 Количество дней просрочки поставки материалов и запчастей для ремонта РТК",
+    X11: "X11 Среднее отклонение напряжения сварочной дуги",
+    X12: "X12 Среднее отклонение тока на двигателе подающего блока",
+    X13: "X13 Среднее отклонение манипулятора от программной траектории",
+    X14: "X14 Наличие на рабочих местах необходимой технологической документации",
+    X15: "X15 Отклонение давления защитного газа",
+    X16: "X16 Отклонение давления сжатого воздуха",
+    X17: "X17 План производства на заданный период в единицах продукции",
+    X18: "X18 Количество балок, сданных ОТК с первого предъявления"
+  };
+
   const renderInitialValues = () => (
     <div className="row">
-      {[...Array(18)].map((_, i) => (
-        <div key={i} className="col-md-4 col-sm-6 mb-2">
-          <label className="form-label small mb-1">X{i + 1}</label>
-          <input
-            type="number"
-            step="0.001"
-            className="form-control form-control-sm"
-            value={initialValues[`X${i + 1}`] || ''}
-            onChange={(e) => onInitialValueChange(`X${i + 1}`, parseFloat(e.target.value))}
-          />
-        </div>
-      ))}
+      {[...Array(18)].map((_, i) => {
+        const fieldKey = `X${i + 1}`;
+        return (
+          <div key={fieldKey} className="col-md-4 col-sm-6 mb-2">
+            <label className="form-label small mb-1">
+              {xFieldNames[fieldKey]}
+            </label>
+            <input
+              type="number"
+              step="0.001"
+              className="form-control form-control-sm"
+              value={initialValues[fieldKey] || ''}
+              onChange={(e) => onInitialValueChange(fieldKey, parseFloat(e.target.value))}
+            />
+          </div>
+        );
+      })}
     </div>
   );
 
+  // ... остальной код без изменений
   const renderParameters = () => {
     const paramGroups = [
       {
