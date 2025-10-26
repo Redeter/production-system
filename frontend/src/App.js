@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import ParametersTab from './components/ParametersTab';
 import ResultsTab from './components/ResultsTab';
-import { getDefaultCoefficients, generateValues, calculate } from './services/api';
+import { generateValues, calculate } from './services/api';
 import './App.css';
 
 function App() {
   const [activeTab, setActiveTab] = useState('parameters');
   const [initialValues, setInitialValues] = useState({});
   const [parameters, setParameters] = useState({});
-  const [coefficients, setCoefficients] = useState('{}');
+  const [functions, setFunctions] = useState({});
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -16,7 +16,7 @@ function App() {
 
   useEffect(() => {
     initializeDefaultValues();
-    loadDefaultCoefficients();
+    initializeDefaultFunctions();
   }, []);
 
   const initializeDefaultValues = () => {
@@ -38,14 +38,14 @@ function App() {
     setParameters(defaultParameters);
   };
 
-  const loadDefaultCoefficients = async () => {
-    try {
-      const response = await getDefaultCoefficients();
-      if (response.success) setCoefficients(JSON.stringify(response.coefficients, null, 2));
-    } catch (err) {
-      console.error('Ошибка загрузки коэффициентов:', err);
-      setError('Ошибка загрузки коэффициентов');
+  const initializeDefaultFunctions = () => {
+    const defaultFunctions = {};
+    for (let i = 1; i <= 36; i++) {
+      defaultFunctions[`f${i}`] = {
+        a: 0, b: 0, c: 0, d: 0
+      };
     }
+    setFunctions(defaultFunctions);
   };
 
   const handleGenerateValues = async () => {
@@ -77,12 +77,6 @@ function App() {
     try {
       setLoading(true); setError(''); setSuccess('');
 
-      let coeffsObj = {};
-      if (coefficients.trim()) {
-        try { coeffsObj = JSON.parse(coefficients); }
-        catch (err) { setError('Ошибка в формате JSON коэффициентов: ' + err.message); return; }
-      }
-
       const missing = [];
       for (let i = 1; i <= 18; i++) {
         const val = initialValues[`X${i}`];
@@ -90,7 +84,11 @@ function App() {
       }
       if (missing.length) { setError(`Не заданы значения для: ${missing.join(', ')}`); return; }
 
-      const requestData = { initialValues, parameters, coefficients: coeffsObj };
+      const requestData = { 
+        initialValues, 
+        parameters, 
+        functions 
+      };
       const response = await calculate(requestData);
 
       if (response.success) {
@@ -105,6 +103,15 @@ function App() {
 
   const handleInitialValueChange = (key, value) => setInitialValues(prev => ({ ...prev, [key]: value }));
   const handleParameterChange = (key, value) => setParameters(prev => ({ ...prev, [key]: value }));
+  const handleFunctionChange = (funcName, coeff, value) => {
+    setFunctions(prev => ({
+      ...prev,
+      [funcName]: {
+        ...prev[funcName],
+        [coeff]: parseFloat(value) || 0
+      }
+    }));
+  };
 
   return (
     <div className="container-fluid py-3">
@@ -145,10 +152,10 @@ function App() {
                 <ParametersTab
                   initialValues={initialValues}
                   parameters={parameters}
-                  coefficients={coefficients}
+                  functions={functions}
                   onInitialValueChange={handleInitialValueChange}
                   onParameterChange={handleParameterChange}
-                  onCoefficientsChange={setCoefficients}
+                  onFunctionChange={handleFunctionChange}
                 />
               }
               {activeTab==='results' && results && <ResultsTab results={results} />}
