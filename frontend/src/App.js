@@ -310,25 +310,6 @@ function App() {
     <div className="container-fluid py-3">
       <div className="row">
         <div className="col-12">
-          <h1 className="text-center mb-3">Калькулятор системы управления качеством</h1>
-
-          {/* Статус подключения */}
-          {getStatusAlert()}
-
-          {/* Сообщения об ошибках и успехах */}
-          {error && (
-            <div className="alert alert-danger alert-dismissible fade show" role="alert">
-              <strong>Ошибка:</strong> {error}
-              <button type="button" className="btn-close" onClick={() => setError('')}></button>
-            </div>
-          )}
-
-          {success && (
-            <div className="alert alert-success alert-dismissible fade show" role="alert">
-              <strong>Успех:</strong> {success}
-              <button type="button" className="btn-close" onClick={() => setSuccess('')}></button>
-            </div>
-          )}
 
           {/* Основная карточка приложения */}
           <div className="card border-dark">
