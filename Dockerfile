@@ -1,39 +1,37 @@
-# Используем официальный Python образ
+# Этап 1: Сборка фронтенда
+FROM node:16-alpine as frontend-build
+
+WORKDIR /app/frontend
+
+# Копируем package.json сначала для кэширования зависимостей
+COPY frontend/package.json frontend/package-lock.json* ./
+RUN npm install
+
+# Копируем исходный код и собираем
+COPY frontend/ .
+RUN npm run build
+
+# Этап 2: Финальный образ
 FROM python:3.9-slim
 
-# Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Устанавливаем зависимости системы
+# Устанавливаем системные зависимости
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
     && rm -rf /var/lib/apt/lists/*
 
-# Копируем и устанавливаем зависимости бэкенда
+# Копируем и устанавливаем Python зависимости
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Копируем код бэкенда
 COPY backend/ .
 
-# Устанавливаем Node.js для сборки фронтенда
-RUN apt-get update && apt-get install -y \
-    nodejs \
-    npm \
-    && rm -rf /var/lib/apt/lists/*
+# Копируем собранный фронтенд из первого этапа
+COPY --from=frontend-build /app/frontend/build ./static
 
-# Копируем и собираем фронтенд
-COPY frontend/ ./frontend/
-WORKDIR /app/frontend
-RUN npm install
-RUN npm run build
-
-# Возвращаемся в корневую директорию
-WORKDIR /app
-
-# Открываем порт
 EXPOSE 5000
 
-# Запускаем приложение
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "1", "--timeout", "120", "app:app"]
