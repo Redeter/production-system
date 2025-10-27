@@ -23,7 +23,27 @@ function App() {
     initializeDefaultFunctions();
   }, []);
 
-  
+  const checkBackendConnection = async () => {
+    try {
+      console.log(' Проверка подключения к бэкенду...');
+      setBackendStatus('checking');
+
+      const response = await fetch($`{API_BASE_URL}/api/health`);
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.status === 'healthy') {
+          setBackendStatus('connected');
+          console.log(' Бэкенд доступен');
+          return;
+        }
+      }
+      throw new Error('Backend not healthy');
+    } catch (error) {
+      console.error(' Бэкенд недоступен:', error.message);
+      setBackendStatus('disconnected');
+    }
+  };
 
   const initializeDefaultValues = () => {
     const defaultInitialValues = {};
