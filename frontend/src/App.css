@@ -1,3 +1,4 @@
+/* Основные стили приложения */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f8f9fa;
@@ -190,4 +191,78 @@ h1, h2, h3, h4, h5, h6 {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+/* Стили для карточек-заполнителей */
+.border-dashed {
+  border: 2px dashed #dee2e6 !important;
+  background-color: #f8f9fa;
+}
+
+.border-dashed .card-body {
+  min-height: 200px;
+}
+
+/* Стили для навигации */
+.btn-group .btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+/* Стили для прогресс-бара */
+.progress {
+  background-color: #e9ecef;
+}
+
+.progress-bar {
+  background-color: #0d6efd;
+  transition: width 0.3s ease;
+}
+
+.progress-bar-striped {
+  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, 
+    transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, 
+    rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+  background-size: 1rem 1rem;
+}
+
+.progress-bar-animated {
+  animation: progress-bar-stripes 1s linear infinite;
+}
+
+@keyframes progress-bar-stripes {
+  0% { background-position: 1rem 0; }
+  100% { background-position: 0 0; }
+}
+
+/* Увеличенные блоки для лепестковых диаграмм */
+.card.shadow-lg {
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+.card-header.bg-primary {
+  background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%) !important;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .col-md-6 {
+    margin-bottom: 1rem;
+  }
+  
+  .d-flex.justify-content-between.align-items-center {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+  
+  .d-flex.align-items-center {
+    margin-top: 0.5rem;
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .btn-group .btn-lg {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
 }

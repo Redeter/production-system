@@ -10,22 +10,30 @@ const apiService = axios.create({
   }
 });
 
-// Получить коэффициенты по умолчанию
-export const getDefaultCoefficients = async () => {
-  const res = await apiService.get('/api/default-coefficients');
-  return res.data;
-};
-
 // Сгенерировать новые значения для системы
 export const generateValues = async () => {
-  const res = await apiService.get('/api/generate-values');
-  return res.data;
+  try {
+    const res = await apiService.get('/api/generate-values');
+    return res.data;
+  } catch (error) {
+    console.error('Error generating values:', error);
+    return { success: false, error: error.message };
+  }
 };
 
 // Рассчитать систему с текущими параметрами
 export const calculate = async (data) => {
-  const res = await apiService.post('/api/calculate', data);
-  return res.data;
+  try {
+    console.log('Sending calculation request:', data);
+    const res = await apiService.post('/api/calculate', data);
+    console.log('Calculation response:', res.data);
+    return res.data;
+  } catch (error) {
+    console.error('Error calculating:', error);
+    return { success: false, error: error.message };
+  }
 };
+
+// Убрал getDefaultCoefficients, так как он больше не нужен
 
 export { apiService };
