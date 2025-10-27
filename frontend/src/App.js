@@ -4,7 +4,7 @@ import ResultsTab from './components/ResultsTab';
 import './App.css';
 
 // Базовый URL для API
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'process.env.REACT_APP_API_URL';
 
 function App() {
   const [activeTab, setActiveTab] = useState('parameters');
