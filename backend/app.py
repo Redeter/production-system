@@ -44,7 +44,7 @@ except ImportError as e:
     calculator = CalculatorStub()
 
 app = Flask(__name__, static_folder='static')
-CORS(app, origins=["https://production-system-ff80.onrender.com", "https://production-system-ff80.onrender.com", "https://production-system-ff80.onrender.com"])
+CORS(app, origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:5000"])
 
 # -------------------
 # API маршруты
