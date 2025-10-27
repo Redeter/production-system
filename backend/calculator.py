@@ -399,7 +399,7 @@ def get_test_values():
         'dPG': 0.1, 'dPGstar': 0.5,
         'dPV': 0.2, 'dPVstar': 1,
         'NTP': 90, 'Nd': 80, 'Ab': 5,
-        'T': 20, 'dt': 1
+        'T': 50, 'dt': 0.5
     }
     
     # Коэффициенты полиномов (реалистичные для производственного процесса)
@@ -645,8 +645,8 @@ def generate_suitable_values():
     # Дополнительные параметры с уменьшенными значениями
     values['Nw'] = random.randint(1, 5)  # уменьшен диапазон
     values['Ns'] = random.randint(1, 5)  # уменьшен диапазон
-    values['T'] = 20
-    values['dt'] = 1
+    values['T'] = 50.0
+    values['dt'] = 0.5
     
     # Генерация коэффициентов полиномов с уменьшенными значениями
     poly_coeffs = generate_polynomial_coefficients()

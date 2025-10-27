@@ -4,7 +4,7 @@ import ResultsTab from './components/ResultsTab';
 import './App.css';
 
 // Базовый URL для API
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+const API_BASE_URL = 'http://localhost:5000';
 
 function App() {
   const [activeTab, setActiveTab] = useState('parameters');
@@ -25,22 +25,22 @@ function App() {
 
   const checkBackendConnection = async () => {
     try {
-      console.log(' Проверка подключения к бэкенду...');
+      console.log('🔍 Проверка подключения к бэкенду...');
       setBackendStatus('checking');
-
-      const response = await fetch($`{API_BASE_URL}/api/health`);
-
+      
+      const response = await fetch(`${API_BASE_URL}/api/health`);
+      
       if (response.ok) {
         const data = await response.json();
         if (data.status === 'healthy') {
           setBackendStatus('connected');
-          console.log(' Бэкенд доступен');
+          console.log('✅ Бэкенд доступен');
           return;
         }
       }
       throw new Error('Backend not healthy');
     } catch (error) {
-      console.error(' Бэкенд недоступен:', error.message);
+      console.error('❌ Бэкенд недоступен:', error.message);
       setBackendStatus('disconnected');
     }
   };
@@ -310,8 +310,25 @@ function App() {
     <div className="container-fluid py-3">
       <div className="row">
         <div className="col-12">
+          <h1 className="text-center mb-3">Калькулятор системы управления качеством</h1>
 
-          
+          {/* Статус подключения */}
+          {getStatusAlert()}
+
+          {/* Сообщения об ошибках и успехах */}
+          {error && (
+            <div className="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong>Ошибка:</strong> {error}
+              <button type="button" className="btn-close" onClick={() => setError('')}></button>
+            </div>
+          )}
+
+          {success && (
+            <div className="alert alert-success alert-dismissible fade show" role="alert">
+              <strong>Успех:</strong> {success}
+              <button type="button" className="btn-close" onClick={() => setSuccess('')}></button>
+            </div>
+          )}
 
           {/* Основная карточка приложения */}
           <div className="card border-dark">
